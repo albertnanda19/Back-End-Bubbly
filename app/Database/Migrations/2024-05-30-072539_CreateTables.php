@@ -8,10 +8,8 @@ class CreateTables extends Migration
 {
     public function up()
     {
-        // Create Extension
         $this->db->query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
 
-        // Create roles table
         $this->db->query("
             CREATE TABLE roles (
                 id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -19,7 +17,6 @@ class CreateTables extends Migration
             );
         ");
 
-        // Create users table
         $this->db->query("
             CREATE TABLE users (
                 id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -30,11 +27,29 @@ class CreateTables extends Migration
                 email VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL,
                 role_id UUID,
-                FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
             );
         ");
 
-        // Create stores table
+        $this->db->query("
+            CREATE OR REPLACE FUNCTION update_updated_at_column()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                NEW.updated_at = CURRENT_TIMESTAMP;
+                RETURN NEW;
+            END;
+            $$ language 'plpgsql';
+        ");
+
+        $this->db->query("
+            CREATE TRIGGER update_users_updated_at
+            BEFORE UPDATE ON users
+            FOR EACH ROW
+            EXECUTE FUNCTION update_updated_at_column();
+        ");
+
         $this->db->query("
             CREATE TABLE stores (
                 id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -47,11 +62,10 @@ class CreateTables extends Migration
                 close_time TIMESTAMP,
                 likes INT DEFAULT 0,
                 followers INT DEFAULT 0,
-                FOREIGN KEY (id_seller) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+                CONSTRAINT fk_id_seller FOREIGN KEY (id_seller) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
             );
         ");
 
-        // Create categories table
         $this->db->query("
             CREATE TABLE categories (
                 id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -59,7 +73,6 @@ class CreateTables extends Migration
             );
         ");
 
-        // Create products table
         $this->db->query("
             CREATE TABLE products (
                 id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -72,9 +85,9 @@ class CreateTables extends Migration
                 likes INT DEFAULT 0,
                 created_at TIMESTAMP,
                 updated_at TIMESTAMP,
-                FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
+                CONSTRAINT fk_store_id FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT fk_seller_id FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT fk_category_id FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
             );
         ");
     }
@@ -86,5 +99,8 @@ class CreateTables extends Migration
         $this->forge->dropTable('stores');
         $this->forge->dropTable('users');
         $this->forge->dropTable('roles');
+
+        $this->db->query("DROP TRIGGER IF EXISTS update_users_updated_at ON users;");
+        $this->db->query("DROP FUNCTION IF EXISTS update_updated_at_column();");
     }
 }

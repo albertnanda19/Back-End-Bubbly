@@ -2,9 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Repositories\UserRepository;
+use App\Interfaces\UserRepositoryInterface;
 use CodeIgniter\RESTful\ResourceController;
 use \Firebase\JWT\JWT;
+use Config\Services;
 
 class AuthController extends ResourceController
 {
@@ -12,7 +13,7 @@ class AuthController extends ResourceController
 
     public function __construct()
     {
-        $this->userRepository = new UserRepository();
+        $this->userRepository = Services::userRepository();
     }
 
     public function login()
@@ -52,7 +53,7 @@ class AuthController extends ResourceController
             'iss' => 'back-end-bubbly',
             'aud' => 'front-end-bubbly',
             'iat' => time(),
-            'exp' => time() + 3600, 
+            'exp' => time() + 3600,
             'sub' => $user['id'],
             'email' => $user['email'],
             'role_id' => $user['role_id']
@@ -69,11 +70,10 @@ class AuthController extends ResourceController
             'iss' => 'back-end-bubbly',
             'aud' => 'front-end-bubbly',
             'iat' => time(),
-            'exp' => time() + 1209600, 
+            'exp' => time() + 1209600,
             'sub' => $user['id'],
         ];
 
         return JWT::encode($payload, $key, 'RS256');
     }
-
 }

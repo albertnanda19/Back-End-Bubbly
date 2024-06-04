@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\RoleModel;
+use App\Interfaces\RoleRepositoryInterface;
 
-class RoleRepository extends BaseRepository
+class RoleRepository extends BaseRepository implements RoleRepositoryInterface
 {
     public function __construct()
     {

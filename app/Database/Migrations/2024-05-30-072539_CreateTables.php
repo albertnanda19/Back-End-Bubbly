@@ -40,7 +40,7 @@ class CreateTables extends Migration
                 NEW.updated_at = CURRENT_TIMESTAMP;
                 RETURN NEW;
             END;
-            $$ language 'plpgsql';
+            $$ LANGUAGE 'plpgsql';
         ");
 
         $this->db->query("
@@ -93,15 +93,25 @@ class CreateTables extends Migration
                 CONSTRAINT fk_category_id FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
             );
         ");
+
+        $this->db->query("
+            CREATE TABLE store_followers (
+                user_id UUID,
+                store_id UUID,
+                CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT fk_store_id FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE ON UPDATE CASCADE
+            );
+        ");
     }
 
     public function down()
     {
-        $this->forge->dropTable('products');
-        $this->forge->dropTable('categories');
-        $this->forge->dropTable('stores');
-        $this->forge->dropTable('users');
-        $this->forge->dropTable('roles');
+        $this->db->query("DROP TABLE IF EXISTS store_followers;");
+        $this->db->query("DROP TABLE IF EXISTS products;");
+        $this->db->query("DROP TABLE IF EXISTS categories;");
+        $this->db->query("DROP TABLE IF EXISTS stores;");
+        $this->db->query("DROP TABLE IF EXISTS users;");
+        $this->db->query("DROP TABLE IF EXISTS roles;");
 
         $this->db->query("DROP TRIGGER IF EXISTS update_users_updated_at ON users;");
         $this->db->query("DROP FUNCTION IF EXISTS update_updated_at_column();");

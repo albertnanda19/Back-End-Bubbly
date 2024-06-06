@@ -20,7 +20,7 @@ class StoreSeeder extends Seeder
                 'open_time' => '09:00:00',
                 'close_time' => '18:00:00',
                 'likes' => 100,
-                'followers' => 200,
+                'followers' => 0, 
                 'address' => 'Alamat Toko 1',
             ],
             [
@@ -32,7 +32,7 @@ class StoreSeeder extends Seeder
                 'open_time' => '10:00:00',
                 'close_time' => '19:00:00',
                 'likes' => 150,
-                'followers' => 300,
+                'followers' => 0, 
                 'address' => 'Alamat Toko 2',
             ],
             [
@@ -44,7 +44,7 @@ class StoreSeeder extends Seeder
                 'open_time' => '08:00:00',
                 'close_time' => '17:00:00',
                 'likes' => 200,
-                'followers' => 400,
+                'followers' => 0, 
                 'address' => 'Alamat Toko 3',
             ]
         ];

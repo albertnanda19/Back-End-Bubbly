@@ -1,26 +1,14 @@
 {
   "status": 200,
-  "message": "Berhasil mendapatkan daftar produk",
+  "message": "Berhasil mendapatkan daftar kategori produk",
   "data": [
     {
-      "id": "id produk",
-      "product_name": "nama produk",
-      "price": 10000,
-      "description": "deskripsi produk",
-      "category": "kategori produk",
-      "likes": 1,
-      "store_name": "nama toko",
-      "image": "url gambar produk"
+      "id": "id kategori",
+      "nama_kategori": "nama kategori"
     },
     {
-      "id": "id produk",
-      "product_name": "nama produk",
-      "price": 10000,
-      "description": "deskripsi produk",
-      "category": "kategori produk",
-      "likes": 1,
-      "store_name": "nama toko",
-      "image": "url gambar produk"
+      "id": "id kategori",
+      "nama_kategori": "nama kategori"
     }
   ]
 }

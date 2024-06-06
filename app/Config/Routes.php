@@ -8,3 +8,4 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->post('auth/login', 'AuthController::login');
 $routes->get('products', 'ProductController::index');
+$routes->get('categories', 'CategoryController::index');

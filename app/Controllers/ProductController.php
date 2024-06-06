@@ -17,7 +17,11 @@ class ProductController extends ResourceController
     public function index()
     {
         $products = $this->productRepository->getAllProducts();
-        
+
+        foreach ($products as &$product) {
+            $product['likes'] = (int)$product['likes'];
+        }
+
         return createResponse(200, 'Berhasil mendapatkan daftar produk', $products);
     }
 }

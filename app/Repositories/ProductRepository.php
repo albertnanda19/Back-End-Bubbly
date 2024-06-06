@@ -3,30 +3,36 @@
 namespace App\Repositories;
 
 use App\Models\ProductModel;
-use CodeIgniter\Database\BaseBuilder;
 
 class ProductRepository extends BaseRepository
 {
     protected $productModel;
-    protected $db;
 
     public function __construct()
     {
         $this->productModel = new ProductModel();
-        $this->db = \Config\Database::connect();
     }
 
     public function getAllProducts($categoryId = null)
     {
-        $builder = $this->db->table('products p')
-                            ->select('p.id, p.name as product_name, p.price, p.deskripsi as description, c.name as category, p.likes, s.name as store_name, p.images as image')
-                            ->join('categories c', 'p.category_id = c.id')
-                            ->join('stores s', 'p.store_id = s.id');
+        $builder = $this->productModel->select(
+            'products.id, products.name as product_name, products.price, products.deskripsi as description, products.likes, 
+            categories.name as category, stores.name as store_name, products.images as image'
+        )
+        ->join('categories', 'categories.id = products.category_id', 'left')
+        ->join('stores', 'stores.id = products.store_id', 'left');
 
         if ($categoryId) {
-            $builder->where('p.category_id', $categoryId);
+            $builder->where('products.category_id', $categoryId);
         }
 
-        return $builder->get()->getResultArray();
+        $products = $builder->findAll();
+
+        foreach ($products as &$product) {
+            $product['price'] = (int)$product['price'];
+            $product['likes'] = (int)$product['likes'];
+        }
+
+        return $products;
     }
 }

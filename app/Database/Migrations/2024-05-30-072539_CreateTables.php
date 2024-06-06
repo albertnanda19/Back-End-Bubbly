@@ -85,6 +85,7 @@ class CreateTables extends Migration
                 deskripsi TEXT NOT NULL,
                 category_id UUID,
                 likes INT DEFAULT 0,
+                images TEXT DEFAULT '',
                 created_at TIMESTAMP,
                 updated_at TIMESTAMP,
                 CONSTRAINT fk_store_id FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE ON UPDATE CASCADE,

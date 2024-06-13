@@ -35,4 +35,16 @@ class ProductRepository extends BaseRepository
 
         return $products;
     }
+
+    public function findById($id)
+    {
+        return $this->productModel->select(
+            'products.id, products.name as product_name, products.price, products.deskripsi as description, 
+            stores.name as store_name, products.images as image, stores.contact, stores.description as store_description, 
+            stores.google_maps_src'
+        )
+        ->join('stores', 'stores.id = products.store_id', 'left')
+        ->where('products.id', $id)
+        ->first();
+    }
 }

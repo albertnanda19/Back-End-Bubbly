@@ -1,14 +1,5 @@
 {
-  "status": 200,
-  "message": "Berhasil mendapatkan daftar kategori produk",
-  "data": [
-    {
-      "id": "id kategori",
-      "nama_kategori": "nama kategori"
-    },
-    {
-      "id": "id kategori",
-      "nama_kategori": "nama kategori"
-    }
-  ]
+  "status": 404,
+  "message": "Produk tidak ditemukan",
+  "data": null
 }

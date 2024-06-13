@@ -22,4 +22,27 @@ class ProductController extends ResourceController
 
         return createResponse(200, 'Berhasil mendapatkan daftar produk', $products);
     }
+
+    public function showCertainProduct($id)
+    {
+        $product = $this->productRepository->findById($id);
+
+        if (!$product) {
+            return createResponse(404, 'Produk tidak ditemukan', null);
+        }
+
+        $productData = [
+            'id' => $product['id'],
+            'name' => $product['product_name'],
+            'price' => (int)$product['price'],
+            'store_name' => $product['store_name'],
+            'image_url' => $product['image'],
+            'contact' => $product['contact'],
+            'product_description' => $product['description'],
+            'store_description' => $product['store_description'],
+            'google_maps_src' => $product['google_maps_src']
+        ];
+
+        return createResponse(200, 'Berhasil mendapatkan data produk', $productData);
+    }
 }

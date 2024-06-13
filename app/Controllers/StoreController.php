@@ -14,6 +14,13 @@ class StoreController extends ResourceController
         $this->storeRepository = new StoreRepository();
     }
 
+    public function index()
+    {
+        $stores = $this->storeRepository->getAllStores();
+
+        return createResponse(200, 'Berhasil mendapatkan data daftar toko', $stores);
+    }
+
     public function showCertainStore($id)
     {
         $store = $this->storeRepository->findByIdWithProducts($id);

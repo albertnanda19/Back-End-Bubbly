@@ -1,5 +1,13 @@
 {
-  "status": 404,
-  "message": "Produk tidak ditemukan",
-  "data": null
+  "status": 200,
+  "message": "Berhasil mendapatkan data daftar toko",
+  "data": [
+    {
+      "id": "id toko",
+      "name": "nama toko",
+      "seller_name": "nama penjual",
+      "address": "alamat toko",
+      "logo": "logo toko"
+    }
+  ]
 }

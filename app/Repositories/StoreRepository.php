@@ -43,4 +43,13 @@ class StoreRepository extends BaseRepository
 
         return $store;
     }
+
+    public function getAllStores()
+    {
+        return $this->storeModel->select(
+            'stores.id, stores.name, stores.logo, stores.address, users.name as seller_name'
+        )
+        ->join('users', 'users.id = stores.id_seller', 'left')
+        ->findAll();
+    }
 }

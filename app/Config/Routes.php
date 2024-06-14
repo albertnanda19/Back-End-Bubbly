@@ -7,6 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->post('auth/login', 'AuthController::login');
+$routes->post('auth/register', 'AuthController::register');
 $routes->get('products', 'ProductController::index');
 $routes->get('categories', 'CategoryController::index');
 $routes->get('product/(:segment)', 'ProductController::showCertainProduct/$1');
